@@ -1,10 +1,16 @@
 void setup() {
+  
+    Serial1.begin(19200);
+    
+    //Stepper current doing 3.5 steps --> lower to 1.5
+    
+    //Clamp Shell
 
     // constants
     #define maxStepperSpeed 0.27 // inch/s
     #define minStepperSpeed 150 // inch/s
     #define travelPerStep 0.00015625 // @ full stepping
-    #define railTravel 3.193
+    #define railTravel 3.193 /0.
     #define maxPeriod 75
     #define minPeriod 44
 
@@ -46,18 +52,22 @@ void setup() {
 
 void loop() {
   
-  movedoor(1);
-  delay(2000);
+  Serial1.println("Motor testing begun");
+  Serial1.println("Opening Door");
   movedoor(0);
   delay(2000);
-  
-  
+  Serial1.println("Closing Door");
+  movedoor(1);
+  Serial1.println("Motor Testing Cycle Ended");
+  delay(2000);
+// 0 is to open
+// 1 is to close :D
 }
 
 void movedoor(int direction) {
 
     //More Constants
-    unsigned long steps = (railTravel/travelPerStep)*16;
+    unsigned long steps = (railTravel/travelPerStep)*8;
     int period = maxPeriod;                 // set initial speed
 
 
@@ -74,7 +84,7 @@ void movedoor(int direction) {
       //Actuator Movement
 
       analogWrite (PWMA, 90);
-      delay(2000);
+      delay(4000);
       analogWrite (PWMA, 0);
 
       //Motor Movement
@@ -134,11 +144,11 @@ void movedoor(int direction) {
         steps--;
     }
 
-  //actuator movement
+    //actuator movement
 
-   analogWrite (PWMA, 90);
-      delay(2000);
-      analogWrite (PWMA, 0);
+    analogWrite (PWMA, 90);
+    delay(4000);
+    analogWrite (PWMA, 0);
 
     digitalWrite(motor1_ena, HIGH); //Disable Motor
     digitalWrite(stand, LOW); //Disable Actuator
